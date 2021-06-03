@@ -12,9 +12,6 @@ export class Layout extends Component {
                 <Container>
                     {this.props.children}
                 </Container>
-                <footer>
-                    {process.env.REACT_APP_TEST} Marco™
-                </footer>
             </div>
         );
     }
