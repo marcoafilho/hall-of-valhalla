@@ -48,14 +48,14 @@ namespace HallOfValhalla
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-            app.Use(async (context, nextMiddleware) => {
-                context.Response.OnStarting(() =>
-                {
-                    context.Response.Headers.Add("Site", Configuration.GetSection("Auth0")["Domain"]);
-                    return Task.FromResult(0);
-                });
-                await nextMiddleware();
-            });
+            //app.Use(async (context, nextMiddleware) => {
+            //    context.Response.OnStarting(() =>
+            //    {
+            //        context.Response.Headers.Add("Site", Configuration.GetSection("Auth0")["Domain"]);
+            //        return Task.FromResult(0);
+            //    });
+            //    await nextMiddleware();
+            //});
 
             app.UseRouting();
 
