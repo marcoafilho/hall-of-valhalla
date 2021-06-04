@@ -32,7 +32,7 @@ const Profile = () => {
         };
 
         getUserMetadata();
-    }, [user]);
+    }, [user, getAccessTokenSilently]);
 
     if (isLoading) {
         return <div>Loading...</div>;
