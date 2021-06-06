@@ -15,8 +15,6 @@
     <PackageReference Include="Azure.Identity" Version="1.4.0" />
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
-    <PackageReference Include="Cosmonaut" Version="2.11.3" />
-    <PackageReference Include="Cosmonaut.Extensions.Microsoft.DependencyInjection" Version="2.3.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.19.0" />
   </ItemGroup>
 
@@ -34,6 +32,10 @@
     <Folder Include="Contracts\V1\" />
     <Folder Include="Contracts\V1\Requests\" />
     <Folder Include="Contracts\V1\Responses\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Helpers\Digest\" />
+    <Folder Include="ClientApp\src\screens\" />
+    <Folder Include="ClientApp\src\images\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

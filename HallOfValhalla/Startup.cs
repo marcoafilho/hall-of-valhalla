@@ -1,7 +1,5 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Cosmonaut;
-using Cosmonaut.Extensions.Microsoft.DependencyInjection;
 using HallOfValhalla.Domain;
 using HallOfValhalla.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,7 +11,9 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace HallOfValhalla
@@ -33,8 +33,10 @@ namespace HallOfValhalla
 
             services.AddControllersWithViews();
 
-            services.AddSingleton<IConventionService>(InitializeCosmosClientInstanceAsync(Configuration.GetSection("DB")).GetAwaiter().GetResult());
-
+            services.AddSingleton<IConventionService>((sp) => InitializeCosmosClientInstance(Configuration.GetSection("DB")));
+            services.AddSingleton<ITopicService, TopicService>();
+            services.AddSingleton<IVenueService, VenueService>();
+            
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -47,7 +49,7 @@ namespace HallOfValhalla
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = domain;
+                    options.Authority = $"https://{Configuration.GetSection("Auth0")["Domain"]}/";
                     options.Audience = Configuration.GetSection("Auth0")["Audience"];
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -61,6 +63,10 @@ namespace HallOfValhalla
             });
 
             services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
+
+            services.AddMemoryCache();
+
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,7 +110,10 @@ namespace HallOfValhalla
             });
         }
 
-        private static async Task<ConventionService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
+        // TODO: Change this.
+        // Options class - ConfigureOptions
+        // Move config to IOptions and load into the conventionService
+        private static ConventionService InitializeCosmosClientInstance(IConfigurationSection configurationSection)
         {
             string databaseName = configurationSection.GetSection("DatabaseName").Value;
             string containerName = configurationSection.GetSection("ContainerName").Value;
@@ -112,8 +121,6 @@ namespace HallOfValhalla
             string key = configurationSection.GetSection("PrimaryKey").Value;
             Microsoft.Azure.Cosmos.CosmosClient client = new(account, key);
             ConventionService conventionService = new(client, databaseName, containerName);
-            Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-            await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
 
             return conventionService;
         }

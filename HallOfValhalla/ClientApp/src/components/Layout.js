@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
 import { NavMenu } from './NavMenu';
 
 export class Layout extends Component {
@@ -7,12 +6,15 @@ export class Layout extends Component {
 
     render() {
         return (
-            <div>
-                <NavMenu />
-                <Container>
+            <>
+                <header>
+                    <NavMenu />
+                </header>
+
+                <main className="container bg-light">
                     {this.props.children}
-                </Container>
-            </div>
+                </main>
+            </>
         );
     }
 }

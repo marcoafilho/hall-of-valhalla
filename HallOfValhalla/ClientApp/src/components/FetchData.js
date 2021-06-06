@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Link } from 'react-router-dom';
 
 const FetchData = () => {
     const [data, setData] = useState([]);
@@ -61,7 +62,11 @@ const FetchData = () => {
             <tbody>
                 {data.map(convention =>
                     <tr key={convention.id}>
-                        <td>{convention.name}</td>
+                        <td>
+                            <Link to={ "/conventions/" + convention.id}>
+                                {convention.name}
+                            </Link>
+                        </td>
                         <td><button onClick={(event) => handleRegistration(convention.id, event)}>Register</button></td>
                     </tr>
                 )}

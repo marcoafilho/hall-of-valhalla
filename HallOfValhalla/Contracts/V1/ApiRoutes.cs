@@ -25,5 +25,20 @@
         {
             public const string Create = Base + "/conventions/{conventionId:Guid}/registrations";
         }
+
+        public static class Reservations
+        {
+            public const string Create = Base + "/talks/{talkId:Guid}/reservations";
+        }
+
+        public static class Topics
+        {
+            public const string Index = Base + "/topics";
+        }
+
+        public static class Venues
+        {
+            public const string Index = Base + "/venues";
+        }
     }
 }

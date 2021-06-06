@@ -8,20 +8,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HallOfValhalla.Controllers.V1
 {
-    public class RegistrationsController : ControllerBase
+    public class ReservationsController : ControllerBase
     {
         private readonly IConventionService _conventionService;
 
-        public RegistrationsController(IConventionService conventionService)
+        public ReservationsController(IConventionService conventionService)
         {
             _conventionService = conventionService;
         }
 
         [Authorize]
-        [HttpPost(ApiRoutes.Registrations.Create)]
-        public async Task<IActionResult> Create([FromRoute] Guid conventionId, [FromBody] CreateRegistrationRequest request)
+        [HttpPost(ApiRoutes.Reservations.Create)]
+        public async Task<IActionResult> Create([FromRoute] Guid talkId, [FromBody] CreateReservationRequest request)
         {
-            bool added = await _conventionService.AddParticipantAsync(conventionId, request.UserId);
+            bool added = await _conventionService.ReserveTalkAsync(talkId, request.UserId);
 
             if (!added)
             {
@@ -29,8 +29,7 @@ namespace HallOfValhalla.Controllers.V1
             }
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var locationUri = baseUrl + "/" + ApiRoutes.Conventions.Show.Replace("{conventionId}", conventionId.ToString());
-            return Created(locationUri, added);
+            return Created(baseUrl, added);
         }
     }
 }

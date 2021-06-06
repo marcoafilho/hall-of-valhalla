@@ -5,9 +5,9 @@ const SignOutButton = () => {
     const { isAuthenticated, logout } = useAuth0();
 
     return isAuthenticated && (
-        <button onClick={() => logout({ returnTo: window.location.origin })}>
+        <a className="text-dark nav-link" href="/" onClick={() => logout({ returnTo: window.location.origin })}>
             Sign Out
-        </button>
+        </a>
     );
 };
 

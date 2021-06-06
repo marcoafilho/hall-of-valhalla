@@ -18,5 +18,7 @@ namespace HallOfValhalla.Services
         Task<bool> DeleteConventionAsync(Guid conventionId);
 
         Task<bool> AddParticipantAsync(Guid conventionId, string userId);
+
+        Task<bool> ReserveTalkAsync(Guid talkId, string userId);
     }
 }
