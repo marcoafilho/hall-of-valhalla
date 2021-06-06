@@ -59,7 +59,9 @@ namespace HallOfValhalla
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("read:conventions", policy => policy.Requirements.Add(new HasScopeRequirement("read:conventions", domain)));
+                options.AddPolicy("create:talks", policy => policy.Requirements.Add(new HasScopeRequirement("create:talks", domain)));
+                options.AddPolicy("manage:conventions", policy => policy.Requirements.Add(new HasScopeRequirement("manage:conventions", domain)));
+                options.AddPolicy("manage:events", policy => policy.Requirements.Add(new HasScopeRequirement("manage:events", domain)));
             });
 
             services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();

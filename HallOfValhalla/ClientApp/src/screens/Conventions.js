@@ -19,17 +19,19 @@ const Conventions = () => {
         <div className="row">
             <div className="col-8">
                 <h1>Upcoming Conventions</h1>
-                {conventions.map(convention =>
-                    <div key={convention.id} className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">
-                                <Link to={"/conventions/" + convention.id} className="link-dark">
-                                    {convention.name}
-                                </Link>
-                            </h5>
+                <div class="conventions mb-3">
+                    {conventions.map(convention =>
+                        <div key={convention.id} className="card mb-3">
+                            <div className="card-body">
+                                <h5 className="card-title">
+                                    <Link to={"/conventions/" + convention.id} className="link-dark">
+                                        {convention.name}
+                                    </Link>
+                                </h5>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
             <div className="col-4" />
         </div>

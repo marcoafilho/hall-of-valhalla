@@ -39,6 +39,7 @@ namespace HallOfValhalla.Controllers.V1
             return Ok(convention);
         }
 
+        [Authorize("manage:conventions")]
         [HttpPost(ApiRoutes.Conventions.Create)]
         public async Task<IActionResult> Create([FromBody] CreateConventionRequest request)
         {
@@ -57,6 +58,7 @@ namespace HallOfValhalla.Controllers.V1
             return Created(locationUri, conventionResponse);
         }
 
+        [Authorize("manage:conventions")]
         [HttpPut(ApiRoutes.Conventions.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid conventionId, [FromBody] UpdateConventionRequest request)
         {
@@ -71,6 +73,7 @@ namespace HallOfValhalla.Controllers.V1
             return updated ? Ok() : NotFound();
         }
 
+        [Authorize("manage:conventions")]
         [HttpDelete(ApiRoutes.Conventions.Destroy)]
         public async Task<IActionResult> Destroy([FromRoute] Guid conventionId)
         {

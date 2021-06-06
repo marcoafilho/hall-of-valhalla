@@ -164,5 +164,37 @@ namespace HallOfValhalla.Services
 
             return true;
         }
+
+        public async Task<bool> CreateTalkAsync(Guid conventionId, Talk talk)
+        {
+            TalkDto talkDto = new()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Title = talk.Title,
+                Description = talk.Description,
+                Speaker = talk.Speaker
+            };
+
+            try
+            {
+                ItemResponse<ConventionDto> response = await _container.ReadItemAsync<ConventionDto>(conventionId.ToString(), new PartitionKey(conventionId.ToString()));
+                var conventionDto = response.Resource;
+                if (conventionDto.Talks is null)
+                {
+                    conventionDto.Talks = new HashSet<TalkDto> { talkDto };
+                }
+                else
+                {
+                    conventionDto.Talks.Add(talkDto);
+                }
+
+                await _container.UpsertItemAsync<ConventionDto>(conventionDto, new PartitionKey(conventionDto.Id));
+                return true;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+        }
     }
 }

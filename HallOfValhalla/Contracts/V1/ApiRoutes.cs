@@ -31,6 +31,11 @@
             public const string Create = Base + "/talks/{talkId:Guid}/reservations";
         }
 
+        public static class Talks
+        {
+            public const string Create = Base + "/talks";
+        }
+
         public static class Topics
         {
             public const string Index = Base + "/topics";

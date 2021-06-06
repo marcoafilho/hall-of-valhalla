@@ -11,7 +11,7 @@ export class Layout extends Component {
                     <NavMenu />
                 </header>
 
-                <main className="container bg-light">
+                <main className="container p-3 bg-light">
                     {this.props.children}
                 </main>
             </>
