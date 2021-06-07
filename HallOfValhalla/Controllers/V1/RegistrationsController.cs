@@ -10,11 +10,23 @@ namespace HallOfValhalla.Controllers.V1
 {
     public class RegistrationsController : ControllerBase
     {
+        public class Users
+        {
+            public string Name { get; set; }
+        }
+
         private readonly IConventionService _conventionService;
 
         public RegistrationsController(IConventionService conventionService)
         {
             _conventionService = conventionService;
+        }
+
+        [Authorize]
+        [HttpGet(ApiRoutes.Registrations.Show)]
+        public IActionResult Show([FromRoute] Guid conventionId)
+        {
+            return Ok(HttpContext.User.Identity.Name);
         }
 
         [Authorize]

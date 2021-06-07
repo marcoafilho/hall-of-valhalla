@@ -4,15 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using HallOfValhalla.Domain;
 using Microsoft.Azure.Cosmos;
-using Microsoft.Azure.Cosmos.Linq;
 
 namespace HallOfValhalla.Services
 {
     public class ConventionService : IConventionService
     {
         private Container _container;
-
-        private List<Convention> _conventions;
 
         public ConventionService(
             CosmosClient dbClient,

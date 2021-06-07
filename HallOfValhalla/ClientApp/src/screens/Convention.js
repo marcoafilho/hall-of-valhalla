@@ -15,7 +15,7 @@ const handleRegistration = (conventionId, user, getAccessTokenSilently, event) =
                 scope: "register:conventions",
             });
 
-            const conventionRegistrationUrl = `${audience}conventions/${conventionId}/registrations`;
+            const conventionRegistrationUrl = `${audience}conventions/${conventionId}/registration`;
 
             await fetch(conventionRegistrationUrl, {
                 method: 'POST',
@@ -74,6 +74,19 @@ const Convention = () => {
         const getConvention = async id => {
             const response = await fetch(`api/v1/conventions/${id}`);
             const data = await response.json();
+
+            const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
+            const accessToken = await getAccessTokenSilently({
+                audience: audience,
+                scope: "read:conventions",
+            });
+
+            const registration = await fetch(`api/v1/conventions/${id}/registration`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
             setConvention(data);
         }

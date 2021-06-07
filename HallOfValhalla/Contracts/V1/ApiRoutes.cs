@@ -23,7 +23,9 @@
 
         public static class Registrations
         {
-            public const string Create = Base + "/conventions/{conventionId:Guid}/registrations";
+            public const string Show = Base + "/conventions/{conventionId:Guid}/registration";
+
+            public const string Create = Base + "/conventions/{conventionId:Guid}/registration";
         }
 
         public static class Reservations
