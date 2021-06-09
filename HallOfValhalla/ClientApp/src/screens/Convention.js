@@ -2,68 +2,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useParams } from 'react-router-dom';
 import ConventionSubscriptionFooter from '../components/ConventionSubscriptionFooter';
-
-const handleRegistration = (conventionId, user, getAccessTokenSilently, event) => {
-    event.preventDefault();
-
-    const registerUserToConvention = async () => {
-        const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
-
-        try {
-            const accessToken = await getAccessTokenSilently({
-                audience: audience,
-                scope: "register:conventions",
-            });
-
-            const conventionRegistrationUrl = `${audience}conventions/${conventionId}/registration`;
-
-            await fetch(conventionRegistrationUrl, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ userId: user.sub })
-            });
-
-        } catch (e) {
-            console.log(e.message);
-        }
-    };
-
-    registerUserToConvention();
-};
-
-const handleReservation = (talkId, user, getAccessTokenSilently, event) => {
-    event.preventDefault();
-
-    const registerUserToConvention = async () => {
-        const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
-
-        try {
-            const accessToken = await getAccessTokenSilently({
-                audience: audience,
-                scope: "reserve:talks",
-            });
-
-            const conventionRegistrationUrl = `${audience}talks/${talkId}/reservations`;
-
-            await fetch(conventionRegistrationUrl, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ userId: user.sub })
-            });
-
-        } catch (e) {
-            console.log(e.message);
-        }
-    };
-
-    registerUserToConvention();
-};
+import TalkRow from '../components/TalkRow';
 
 const Convention = () => {
     const { user, getAccessTokenSilently } = useAuth0();
@@ -74,19 +13,6 @@ const Convention = () => {
         const getConvention = async id => {
             const response = await fetch(`api/v1/conventions/${id}`);
             const data = await response.json();
-
-            const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
-            const accessToken = await getAccessTokenSilently({
-                audience: audience,
-                scope: "read:conventions",
-            });
-
-            const registration = await fetch(`api/v1/conventions/${id}/registration`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                }
-            });
 
             setConvention(data);
         }
@@ -111,22 +37,12 @@ const Convention = () => {
                                 <th>Actions</th>
                             </tr>
                             {convention.talks.map(talk =>
-                                <tr key={talk.id}>
-                                    <td>
-                                        <b>{talk.title}</b>
-                                        <br />
-                                        {talk.description}
-                                    </td>
-                                    <td>{talk.speaker}</td>
-                                    <td>
-                                        <button
-                                            type="button"
-                                            className="btn btn-outline-success"
-                                            onClick={(event) => handleReservation(talk.id, user, getAccessTokenSilently, event)}>
-                                            Reserve a spot!
-                                        </button>
-                                    </td>
-                                </tr>
+                                <TalkRow
+                                    key={talk.id}
+                                    talk={talk}
+                                    user={user}
+                                    getAccessTokenSilently={getAccessTokenSilently}
+                                />
                             )}
                         </tbody>
                     </table>
@@ -135,8 +51,9 @@ const Convention = () => {
                 </div>
             </div>
             <ConventionSubscriptionFooter
-                name={convention.name}
-                onRegister={(event) => handleRegistration(convention.id, user, getAccessTokenSilently, event)}
+                convention={convention}
+                user={user}
+                getAccessTokenSilently={getAccessTokenSilently}
             />
         </>
     );

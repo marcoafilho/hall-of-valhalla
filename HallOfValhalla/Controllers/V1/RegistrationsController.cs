@@ -24,9 +24,11 @@ namespace HallOfValhalla.Controllers.V1
 
         [Authorize]
         [HttpGet(ApiRoutes.Registrations.Show)]
-        public IActionResult Show([FromRoute] Guid conventionId)
+        public async Task<IActionResult> Show([FromRoute] Guid conventionId)
         {
-            return Ok(HttpContext.User.Identity.Name);
+            string userId = HttpContext.User.Identity.Name;
+
+            return Ok(await _conventionService.IsParticipantRegisteredToConventionAsync(conventionId, userId));
         }
 
         [Authorize]

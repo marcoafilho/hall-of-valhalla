@@ -19,6 +19,8 @@ namespace HallOfValhalla.Services
 
         Task<bool> AddParticipantAsync(Guid conventionId, string userId);
 
+        Task<bool> IsParticipantRegisteredToConventionAsync(Guid conventionId, string userId);
+
         Task<bool> ReserveTalkAsync(Guid talkId, string userId);
 
         Task<bool> CreateTalkAsync(Guid conventionId, Talk talk);

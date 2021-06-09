@@ -193,5 +193,21 @@ namespace HallOfValhalla.Services
                 return false;
             }
         }
+
+        public async Task<bool> IsParticipantRegisteredToConventionAsync(Guid conventionId, string userId)
+        {
+            string queryString = $"SELECT 1 FROM c WHERE EXISTS(SELECT VALUE p FROM p IN c.participants WHERE c.id = \"{conventionId}\" AND p = \"{userId}\")";
+            var query = _container.GetItemQueryIterator<ConventionDto>(queryString);
+
+            while (query.HasMoreResults)
+            {
+                foreach (var _ in await query.ReadNextAsync())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

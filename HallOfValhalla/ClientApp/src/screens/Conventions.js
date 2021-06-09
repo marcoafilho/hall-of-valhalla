@@ -19,7 +19,7 @@ const Conventions = () => {
         <div className="row">
             <div className="col-8">
                 <h1>Upcoming Conventions</h1>
-                <div class="conventions mb-3">
+                <div className="conventions mb-3">
                     {conventions.map(convention =>
                         <div key={convention.id} className="card mb-3">
                             <div className="card-body">
